@@ -35,7 +35,7 @@ class Mock(object):
         self.pending = defaultdict(deque)
         self.processed = defaultdict(deque)
         self.emitter = None
-    
+
     def __enter__(self):
         self.old_emit = storm.emit
         storm.emit = self.emit
@@ -46,7 +46,7 @@ class Mock(object):
     def __exit__(self, type, value, traceback):
         storm.emit = self.old_emit
         storm.emitMany = self.old_emitMany
-    
+
     def activate(self, emitter):
         self.emitter = emitter
         if isinstance(emitter, storm.Spout):
@@ -55,11 +55,11 @@ class Mock(object):
             storm.MODE = storm.Bolt
         else:
             assert False, "Neither a spout nor a bolt!"
-    
+
     def emit(self, *args, **kwargs):
         self.__emit(*args, **kwargs)
         #return readTaskIds()
-    
+
     def __emit(self, *args, **kwargs):
         if storm.MODE == storm.Bolt:
             self.emitBolt(*args, **kwargs)
@@ -75,7 +75,7 @@ class Mock(object):
     def emitManyBolt(self, tuples, stream=None, anchors = [], directTask=None):
         for t in tuples:
             self.emitBolt(t, stream, anchors, directTask)
-    
+
     def emitManySpout(self, tuples, stream=None, anchors = [], directTask=None):
         for t in tuples:
             self.emitSpout(t, stream, id, directTask)
@@ -84,14 +84,14 @@ class Mock(object):
         if emitter is None:
             emitter = self.emitter
         return type(emitter).__name__, python_id(emitter)
-    
+
     def emitBolt(self, tup, stream=None, anchors = [], directTask=None):
         # Nice idea, but throws off profiling
         #assert len(tup) == len(self.emitter.declareOutputFields())
         # TODO: We should probably be capturing "anchors" so tests can verify
         # the topology is anchoring output tuples correctly.
         self.pending[self.emitter_id()].append(storm.Tuple(id=None, component=None, stream=stream, task=directTask, values=tup))
-        
+
     def emitSpout(self, tup, stream=None, id=None, directTask=None):
         # Nice idea, but throws off profiling
         #assert len(tup) == len(self.emitter.declareOutputFields())
@@ -102,12 +102,12 @@ class Mock(object):
         result = self.pending[emitter_id].popleft()
         self.processed[emitter_id].append(result)
         return result
-    
+
     def get_output_type(self, emitter):
         emitter_id = self.emitter_id(emitter)
         if emitter_id not in self.output_type:
             self.output_type[emitter_id] = namedtuple('%sTuple' % type(emitter).__name__, emitter.declareOutputFields())
-            
+
         return self.output_type[emitter_id]
 
     @classmethod
@@ -115,7 +115,7 @@ class Mock(object):
         """Tests a simple topology. "Simple" means there it has no branches
         or cycles. "emitters" is a list of emitters, starting with a spout
         followed by 0 or more bolts that run in a chain."""
-        
+
         # The config is almost always required. The only known reason to pass
         # None is when calling run_simple_topology() multiple times for the
         # same components. This can be useful for testing spout ack() and fail()
@@ -133,7 +133,7 @@ class Mock(object):
                 old_length = len(self.pending[spout_id])
                 self.activate(spout)
                 spout.nextTuple()
-            
+
             # For each bolt in the sequence, consume all upstream input.
             for i, bolt in enumerate(emitters[1:]):
                 previous = emitters[i]
@@ -143,10 +143,10 @@ class Mock(object):
 
         def make_storm_tuple(t, emitter):
             return t
-        
+
         def make_python_list(t, emitter):
             return list(t.values)
-        
+
         def make_python_tuple(t, emitter):
             return tuple(t.values)
 
@@ -166,6 +166,6 @@ class Mock(object):
             [ [ make(t, emitter) for t in self.processed[self.emitter_id(emitter)]] for emitter in emitters[:-1] ] + \
             [ [ make(t, emitters[-1]) for t in self.pending[self.emitter_id(emitters[-1])] ] ]
         return dict((k, v) for k, v in zip(emitters, result_values))
-        
+
 def run_simple_topology(*l, **kw):
     return Mock.run_simple_topology(*l, **kw)

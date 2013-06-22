@@ -35,14 +35,14 @@ class TestTopology(unittest.TestCase):
         builder.setBolt("split", SplitSentence(), 8).shuffleGrouping("spout")
         builder.setBolt("count", WordCount(), 12).fieldsGrouping("split", ["word"])
 
-        # Save the topology.        
+        # Save the topology.
         io_out = StringIO()
         builder.write(io_out)
-        
+
         # Read the topology.
         io_in = StringIO(io_out.getvalue())
         topology = builder.read(io_in)
-        
+
         # Verify the topology settings were saved and loaded correctly.
         self.assertEqual(['spout'], topology.spouts.keys())
         self.assertEqual(['count', 'split'], sorted(topology.bolts.keys()))

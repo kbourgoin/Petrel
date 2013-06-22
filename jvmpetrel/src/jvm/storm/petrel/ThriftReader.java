@@ -31,14 +31,14 @@ public class ThriftReader {
 
   /** Used to create empty objects that will be initialized with values from the file. */
   protected final TBaseCreator creator;
-  
+
   /** For reading the file. */
   // private BufferedInputStream bufferedIn;
   private InputStream inputStream;
 
   /** For reading the binary thrift objects. */
   private TBinaryProtocol binaryIn;
-  
+
   /**
     * Constructor.
     */
@@ -47,7 +47,7 @@ public class ThriftReader {
     this.creator = creator;
     binaryIn = new TBinaryProtocol(new TIOStreamTransport(inputStream));
   }
-  
+
   /**
     * Opens the file for reading. Must be called before {@link read()}.
     */

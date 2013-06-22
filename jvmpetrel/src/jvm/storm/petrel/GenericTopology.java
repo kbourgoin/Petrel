@@ -21,7 +21,7 @@ public class GenericTopology
     {
         InputStream stream = ResourceLoader.getResourceAsStream("resources/topology.ser", GenericTopology.class);
         assert stream != null;
-        
+
         try
         {
             // Create the reader
@@ -30,14 +30,14 @@ public class GenericTopology
                 return new StormTopology();
               }
             });
-            
+
             // Read objects
             assert thriftIn.hasNext();
             TBase base = thriftIn.read();
             assert base != null;
             StormTopology topology = (StormTopology) base;
             assert topology != null;
-            
+
             return topology;
         }
         finally
@@ -81,7 +81,7 @@ public class GenericTopology
             // Close stream
             stream.close();
         }
-        
+
         if (args!=null && args.length > 0)
         {
             StormSubmitter.submitTopology(args[0], conf, topology);
@@ -102,7 +102,7 @@ public class GenericTopology
                     System.out.println("Shutting down local topology");
                     cluster.shutdown();
                 }
-            });    
+            });
 
             while (true)
             {

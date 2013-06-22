@@ -13,7 +13,7 @@ from .emitter import EmitterBase
 from .status import status
 
 def get_storm_version():
-    return subprocess.check_output(['storm', 'version']).strip()    
+    return subprocess.check_output(['storm', 'version']).strip()
 
 def get_sourcejar():
     storm_version = get_storm_version()
@@ -53,7 +53,7 @@ def submit(sourcejar, destjar, config, venv, name, definition, logdir, extrastor
 
 def kill(name, config):
     config = read_yaml(config)
-    
+
     # Read the nimbus.host setting from topology YAML so we can submit the
     # "kill" command to the correct cluster.
     nimbus_host = config.get('nimbus.host')
@@ -92,7 +92,7 @@ def main():
     parser_status.add_argument('--port', help='Only list tasks on this port number')
     parser_status.add_argument('--topology', help='Only list information on this topology')
     parser_status.set_defaults(func=status)
-    
+
     parser_kill = subparsers.add_parser('kill', help='kill a topology running on a cluster')
     parser_kill.add_argument('name', help='name of the topology')
     parser_kill.add_argument('--config', dest='config', required=True,

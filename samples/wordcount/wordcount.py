@@ -29,9 +29,9 @@ def test():
     # pip install nose
     # nosetests wordcount.py
     from nose.tools import assert_equal
-    
+
     bolt = WordCountBolt()
-    
+
     from petrel import mock
     from randomsentence import RandomSentenceSpout
     mock_spout = mock.MockSpout(RandomSentenceSpout.declareOutputFields(), [
@@ -39,7 +39,7 @@ def test():
         ['other'],
         ['word'],
     ])
-    
+
     result = mock.run_simple_topology(None, [mock_spout, bolt], result_type=mock.LIST)
     assert_equal(2, bolt._count['word'])
     assert_equal(1, bolt._count['other'])

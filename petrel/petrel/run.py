@@ -24,7 +24,7 @@ def handle_exception(type, value, tb):
         log = logging.getLogger('petrel.run')
         log.error(message)
     storm.sendFailureMsgToParent(message)
-   
+
     with open_log() as f:
         print >> f, 'Exception occurred in %s. Worker exiting.' % module_name
         f.write(''.join(traceback.format_exception(type, value, tb)))
@@ -32,7 +32,7 @@ def handle_exception(type, value, tb):
 def log_config():
     assert 'PETREL_LOG_PATH' in os.environ
     from subprocess import check_output
-    
+
     # Set an environment variable that points to the Nimbus server.
     # logconfig.ini may use this to direct SysLogHandler to this machine.
     try:
@@ -40,7 +40,7 @@ def log_config():
     except Exception as e:
         # It's not worth crashing if we can't set this.
         pass
-    
+
     if os.path.exists(LOG_CONFIG_FILE):
         logging.config.fileConfig(LOG_CONFIG_FILE)
 
@@ -56,7 +56,7 @@ class StormHandler(logging.Handler):
             script_name = '<unknown>'
         process_id = os.getpid()
         self.format_string = '[%s][%s][%d] %%s' % (hostname, script_name, process_id)
-    
+
     def emit(self, record):
         from petrel import storm
         msg = self.format(record)
@@ -93,9 +93,9 @@ def main():
         # Initialize logging. Redirect stderr to the log as well.
         log_config()
         log_initialized = True
-        
+
         storm.initialize_profiling()
-        
+
         sys.path[:0] = [ os.getcwd() ]
         if len(sys.argv) == 3:
             module = __import__(module_name)

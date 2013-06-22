@@ -23,7 +23,7 @@ class TopologyBuilder(object):
         self._spouts = {}
         self._commons = {}
         self._bootstrap = []
-    
+
     #/**
     # * Define a new bolt in this topology with the specified amount of parallelism.
     # *
@@ -102,7 +102,7 @@ class TopologyBuilder(object):
                 write_it(f)
         else:
             write_it(stream)
-            
+
         return topology
 
     def read(self, stream):
@@ -114,7 +114,7 @@ class TopologyBuilder(object):
             topology = StormTopology()
             topology.read(protocolIn)
             return topology
-            
+
         if isinstance(stream, basestring):
             with open(stream, 'rb') as f:
                 return read_it(f)
@@ -133,12 +133,12 @@ class TopologyBuilder(object):
         stream_info.output_fields = component.declareOutputFields()
         stream_info.direct = False # Appears to be unused by Storm
         common.streams['default'] = stream_info
-        
+
         return common
 
     def _initCommon(self, id, component, parallelism):
         common = ComponentCommon()
-        
+
         common.inputs = {}
         common.streams = {}
         if parallelism is not None:

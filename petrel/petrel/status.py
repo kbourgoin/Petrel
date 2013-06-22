@@ -34,7 +34,7 @@ def print_topology_status(client, topology, worker, port):
             emit = False
         if port is not None and es.port != port:
             emit = False
-        
+
         if emit:
             record = {}
             record['columns'] = [
@@ -57,7 +57,7 @@ def print_topology_status(client, topology, worker, port):
                     print >>msg
                     print >>msg, es.errors[i].error
                 record['error'] = msg.getvalue()
-                
+
             records.append(record)
 
     records.sort(key=lambda r: (r['columns'][0], r['columns'][1]))
@@ -76,7 +76,7 @@ def status(nimbus, topology, worker, port):
     try:
         summary = client.getClusterInfo()
         #print summary
-        
+
         assert len(summary.topologies) == 1
         for running_topology in summary.topologies:
             if topology is None or topology == running_topology.name:

@@ -4,12 +4,12 @@ import time, logging, random
 
 
 class RandomSentenceSpout(storm.Spout):
-   	
+
 	log = logging.getLogger('RandomSentenceSpout')
 
 	def __init__(self, sentences):
 		self.sentences = sentences
-        
+
 	def nextTuple(self):
 		time.sleep(0.25)
 		sentences = self.sentences
@@ -19,7 +19,7 @@ class RandomSentenceSpout(storm.Spout):
 
 	@classmethod
 	def declareOutputFields(cls):
-		return ['sentence']    
+		return ['sentence']
 
 
 class SplitSentenceBolt(storm.BasicBolt):
@@ -38,7 +38,7 @@ class SplitSentenceBolt(storm.BasicBolt):
 
 
 class WordCountBolt(storm.BasicBolt):
-    
+
     log = logging.getLogger('WordCountBolt')
     count = defaultdict(int)
 

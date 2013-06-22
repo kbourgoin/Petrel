@@ -17,7 +17,7 @@ class EmitterBase(object):
         self.script = script
         self._json = {}
         super(EmitterBase, self).__init__()
-    
+
     def declareOutputFields(declarer):
         raise NotImplementedError()
 

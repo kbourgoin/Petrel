@@ -18,7 +18,7 @@ public class ResourceLoader {
    * <li>From ClassLoaderUtil.class.getClassLoader()
    * <li>callingClass.getClassLoader()
    * </ul>
-   * 
+   *
    * @param resourceName The name of the resource to load
    * @param callingClass The Class object of the calling object
    */
@@ -53,25 +53,25 @@ public class ResourceLoader {
       if (url == null) {
           url = callingClass.getResource(resourceName);
       }
-      
+
       if ((url == null) && (resourceName != null) && (resourceName.charAt(0) != '/')) {
           return getResource('/' + resourceName, callingClass);
       }
 
       return url;
   }
-  
+
   /**
    * This is a convenience method to load a resource as a stream. <p/> The
    * algorithm used to find the resource is given in getResource()
-   * 
+   *
    * @param resourceName The name of the resource to load
    * @param callingClass The Class object of the calling object
    */
   public static InputStream getResourceAsStream(String resourceName, Class callingClass) {
       assert resourceName != null;
       assert callingClass != null;
-      
+
       URL url = getResource(resourceName, callingClass);
 
       try {
@@ -101,7 +101,7 @@ public class ResourceLoader {
    * <li>From ClassLoaderUtil.class.getClassLoader()
    * <li>callingClass.getClassLoader()
    * </ul>
-   * 
+   *
    * @param resourceName The name of the resource to load
    * @param callingClass The Class object of the calling object
    */
@@ -114,7 +114,7 @@ public class ResourceLoader {
           public URL nextElement() {
               return null;
           }
-          
+
       };
       try {
           urls = Thread.currentThread().getContextClassLoader()
@@ -174,7 +174,7 @@ public class ResourceLoader {
           ret.add(urls.nextElement());
       }
 
-      
+
       if (ret.isEmpty() && (resourceName != null) && (resourceName.charAt(0) != '/')) {
           return getResources('/' + resourceName, callingClass);
       }

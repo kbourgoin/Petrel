@@ -25,7 +25,7 @@ class RandomSentenceSpout(Spout):
         "snow white and the seven dwarfs",
         "i am at two with nature"
     ]
-        
+
     def nextTuple(self):
         #if self._index == len(self.sentences):
         #    # This is just a demo; keep sleeping and returning None after we run

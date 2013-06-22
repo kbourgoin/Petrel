@@ -29,10 +29,10 @@ def add_file_to_jar(jar, directory, script=None, required=True):
         path = os.path.join(directory, script)
     else:
         path = directory
-    
+
     # Use glob() to allow for wildcards, e.g. in manifest.txt.
     path_list = glob.glob(path)
-    
+
     if len(path_list) == 0 and required:
         raise ValueError('No files found matching: %s' % path)
     #elif len(path_list) > 1:
@@ -46,7 +46,7 @@ def add_file_to_jar(jar, directory, script=None, required=True):
             path_ext = os.path.splitext(this_path)[-1]
             if path_ext == '.py':
                 if os.path.isabs(this_path):
-                    # py files with absolute path are considered to be modules for 
+                    # py files with absolute path are considered to be modules for
                     # the petrel.emitters and are added to the resources root
                     jar_path = this_path[len(directory) + 1:]
                 else:
@@ -76,7 +76,7 @@ def build_jar(source_jar_path, dest_jar_path, config, venv=None, definition=None
     pip_options = config_yaml.get('petrel.pip_options', '')
 
     module_name, dummy, function_name = definition.rpartition('.')
-    
+
     topology_dir = os.getcwd()
 
     # Make a copy of the input "jvmpetrel" jar. This jar acts as a generic
@@ -87,7 +87,7 @@ def build_jar(source_jar_path, dest_jar_path, config, venv=None, definition=None
         raise ValueError("Error: Destination and source path are the same.")
     shutil.copy(source_jar_path, dest_jar_path)
     jar = zipfile.ZipFile(dest_jar_path, 'a', compression=zipfile.ZIP_DEFLATED)
-    
+
     added_path_entry = False
     try:
         # Add the files listed in manifest.txt to the jar.
@@ -104,12 +104,12 @@ def build_jar(source_jar_path, dest_jar_path, config, venv=None, definition=None
 petrel.user: %s
 petrel.host: %s
 ''' % (getpass.getuser(),socket.gethostname()))
-        
+
         # Also add the topology configuration to the jar.
         with open(config, 'r') as f:
             config_text = f.read()
         add_to_jar(jar, '__topology__.yaml', config_text)
-    
+
         # Call module_name/function_name to populate a Thrift topology object.
         builder = TopologyBuilder()
         module_dir = os.path.abspath(topology_dir)
@@ -154,13 +154,13 @@ petrel.host: %s
                 from operator import add
                 module_name = '%s' % emitter.__module__
                 class_name = '%s' % emitter.__class__.__name__
-                
+
                 v.script = '%s@%s.%s' % (k, module_name, class_name)
                 v.script = re.sub('[\W]+', '_', k)
                 v.execution_command = EmitterBase.DEFAULT_PYTHON
-                
+
                 emitter = base64.b64encode(pickle.dumps(emitter))
-                
+
                 bootstrap = []
                 for bootstrap_cmpnt in builder._bootstrap:
                     bootstrap.append(bootstrap_cmpnt)
@@ -284,7 +284,7 @@ if [ $CREATE_VENV -ne 0 ]; then
     # On Mac OS X, the "flock" command is not available
     create_new=1
     if [ "$has_flock" -eq "0" ]
-    then 
+    then
         if [ -d $VENV ];then
             echo "Using existing venv: $VENV" >>$LOG 2>&1
             shlock
@@ -320,7 +320,7 @@ if [ $CREATE_VENV -ne 0 ]; then
             /bin/bash ./setup.sh $CREATE_VENV >>$VENV_LOG 2>&1
         fi
         if [ "$has_flock" -eq "0" ]
-        then 
+        then
             unlock
         fi
     fi

@@ -16,7 +16,7 @@ PETREL_VERSION = '0.1'
 
 def get_storm_version():
     version = os.environ.get('STORM_VERSION', None)
-    return version or subprocess.check_output(['storm', 'version']).strip()    
+    return version or subprocess.check_output(['storm', 'version']).strip()
 
 def get_version(argv):
     """ Dynamically calculate the version based on VERSION."""
@@ -24,7 +24,7 @@ def get_version(argv):
 
 def build_petrel():
     version = get_storm_version()
-    
+
     # Generate Thrift Python wrappers.
     if os.path.isdir('petrel/generated'):
         shutil.rmtree('petrel/generated')
@@ -35,11 +35,11 @@ def build_petrel():
     f_url.close()
     old_cwd = os.getcwd()
     os.chdir('petrel/generated')
-    
-    subprocess.check_call(['thrift', '-gen', 'py', '-out', '.', '../../storm.thrift'])    
+
+    subprocess.check_call(['thrift', '-gen', 'py', '-out', '.', '../../storm.thrift'])
     os.chdir(old_cwd)
     os.remove('storm.thrift')
-    
+
     # Build JVMPetrel.
     os.chdir('../jvmpetrel')
     subprocess.check_call(['mvn', '-Dstorm_version=%s' % version, 'assembly:assembly'])
