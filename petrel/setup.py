@@ -51,33 +51,32 @@ def build_petrel():
 if 'bdist_egg' in sys.argv or 'develop' in sys.argv:
     build_petrel()
 
-setup(name=PACKAGE
-    ,version=get_version(sys.argv)
-    ,description=("Storm Topology Builder. AirSage, Inc")
-    ,long_description=long_description
-    ,classifiers=[
-         "Programming Language :: Python"
-        ,"Operating System :: POSIX :: Linux"
-        ,"Development Status :: 3 - Alpha"
-        ,"Intended Audience :: Developers"
-        ,"License :: OSI Approved :: BSD License"
-        ,"Topic :: Software Development :: Libraries :: Python Modules"
-        ,"Topic :: System :: Distributed Computing"
-    ]
-    ,keywords='Storm Topology Builder'
-    ,author='bhart'
-    ,url='https://github.com/AirSage/Petrel'
-    ,scripts=[
-         'bin/petrel',
-        ]
-    ,packages=find_packages()
-    ,package_data={'': ['*.jar']}
-    ,license='BSD 3-clause'
-    ,install_requires=[
-        'simplejson==2.6.1',
-        # Request specific Thrift version. Storm is in Java and may be sensitive to version incompatibilities.
-        'thrift==0.8.0',
-        'PyYAML==3.10',
-    ]
-    # Setting this flag makes Petrel easier to debug within a running topology.
-    ,zip_safe=False)
+setup(name=PACKAGE,
+      version=get_version(sys.argv),
+      description=("Storm Topology Builder."),
+      long_description=long_description,
+      classifiers=[
+          "Programming Language :: Python",
+          "Operating System :: POSIX :: Linux",
+          "Development Status :: 3 - Alpha",
+          "Intended Audience :: Developers",
+          "License :: OSI Approved :: BSD License",
+          "Topic :: Software Development :: Libraries :: Python Modules",
+          "Topic :: System :: Distributed Computing",
+      ],
+      keywords='Storm Topology Builder',
+      author='bhart',
+      url='https://github.com/AirSage/Petrel',
+      scripts=[
+          'bin/petrel',
+      ],
+      packages=find_packages(),
+      package_data={'': ['*.jar']},
+      license='BSD 3-clause',
+      install_requires=[
+        'simplejson',
+        'thrift==0.8.0', # In case storm has version incompatibilities
+        'PyYAML',
+      ],
+      zip_safe=False,
+)

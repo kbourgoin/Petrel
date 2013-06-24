@@ -1,6 +1,7 @@
 # Standard files for Petrel
 logconfig.ini
 ../../petrel/dist/petrel-*-py2.7.egg
+randomsentence.py
 #setup.sh
 
 # Topology-specific files

@@ -3,16 +3,20 @@ import random
 import logging
 
 from petrel import storm
-from petrel.emitter import Spout
+from petrel.components import Spout
 
-log = logging.getLogger('randomsentence')
+log = logging.getLogger(__name__)
 
 log.debug('randomsentence loading')
 
 class RandomSentenceSpout(Spout):
     def __init__(self):
-        super(RandomSentenceSpout, self).__init__(script=__file__)
+        super(RandomSentenceSpout, self).__init__()
         #self._index = 0
+
+    def initialize(self, conf, context):
+        log.info('conf: %s', str(conf))
+        log.info('context: %s', str(context))
 
     @classmethod
     def declareOutputFields(cls):
@@ -26,7 +30,7 @@ class RandomSentenceSpout(Spout):
         "i am at two with nature"
     ]
 
-    def nextTuple(self):
+    def next_tuple(self):
         #if self._index == len(self.sentences):
         #    # This is just a demo; keep sleeping and returning None after we run
         #    # out of data. We can't just sleep forever or Storm will hang.
@@ -38,20 +42,7 @@ class RandomSentenceSpout(Spout):
         #sentence = self.sentences[self._index]
         #self._index += 1
         log.debug('randomsentence emitting: %s', sentence)
-        storm.emit([sentence])
-
-# TODO: Revisit this. Currently the spout runs forever, so it's not suitable
-# for run_simple_topology(). We could modify the spout so it stops after
-# emitting 'n' tuples.
-#def test():
-#    # To run this:
-#    # pip install nose
-#    # nosetests wordcount.py
-#    from nose.tools import assert_true
-#    from petrel import mock
-#    spout = RandomSentenceSpout()
-#    result = mock.run_simple_topology(None, [spout])
-#    assert_true(isinstance(result[spout][0].sentence, str))
+        self.emit([sentence])
 
 def run():
     RandomSentenceSpout().run()
